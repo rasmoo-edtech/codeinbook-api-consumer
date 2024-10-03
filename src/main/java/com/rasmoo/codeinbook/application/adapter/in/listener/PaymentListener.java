@@ -5,6 +5,7 @@ import com.rasmoo.codeinbook.domain.port.in.PaymentServicePort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,8 +16,9 @@ public class PaymentListener {
     private final PaymentServicePort paymentServicePort;
 
     @KafkaListener(topics = "payment-topic", groupId = "group-payment")
-    public void paymentTopicEvent(PaymentDTO message) {
+    public void paymentTopicEvent(PaymentDTO message, Acknowledgment acknowledgment) {
         log.info("consumer 1 - id {}", message.id() );
    //     paymentServicePort.process(message);
+        acknowledgment.acknowledge();
     }
 }
